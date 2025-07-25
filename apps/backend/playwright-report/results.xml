@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="4.492388">
+<testsuite name="basic-validation.spec.ts" timestamp="2025-07-25T11:15:36.818Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.694" errors="0">
+<testcase name="MultiSynq MCP Basic Tests › should be able to run Playwright tests" classname="basic-validation.spec.ts" time="3.689">
+</testcase>
+<testcase name="MultiSynq MCP Basic Tests › should validate test configuration" classname="basic-validation.spec.ts" time="0.005">
+</testcase>
+</testsuite>
+</testsuites>

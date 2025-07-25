@@ -18,6 +18,10 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
     "test:multisynq": "vitest run src/lib/multisynq",
+    "test:playwright": "playwright test",
+    "test:playwright:ui": "playwright test --ui",
+    "test:playwright:headed": "playwright test --headed",
+    "test:playwright:debug": "playwright test --debug",
     "db:generate": "dotenv -e ../../.env -- drizzle-kit generate",
     "db:generate:dev": "dotenv -e ../../.env.local -- drizzle-kit generate",
     "db:migrate": "dotenv -e ../../.env -- drizzle-kit migrate",
@@ -42,6 +46,7 @@
     "zod": "^3.25.64"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@repo/eslint-config": "workspace:*",
     "@types/basic-auth": "^1.1.8",
     "@types/cors": "^2.8.19",
