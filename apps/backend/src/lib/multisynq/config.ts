@@ -7,7 +7,6 @@ export const MULTISYNQ_MCP_CONFIG: ServerParameters = {
   env: {
     // Pre-configure with MultiSynq library ID to avoid resolution step
     CONTEXT7_LIBRARY_ID: "/multisynq/docs",
-    CONTEXT7_API_KEY: process.env.CONTEXT7_API_KEY || ""
   }
 };
 
@@ -19,14 +18,14 @@ export const MULTISYNQ_SERVER_CONFIG = {
 };
 
 export const MULTISYNQ_NAMESPACE_CONFIG = {
-  name: "multisynq",
-  description: "MultiSynq Documentation and API Reference",
+  name: "root",
+  description: "MultiSynq Documentation and API Reference - Root Endpoint",
   isSystem: true
 };
 
 export const MULTISYNQ_ENDPOINT_CONFIG = {
-  name: "multisynq",
-  description: "Public endpoint for MultiSynq documentation and API access",
+  name: "root", 
+  description: "Root endpoint for MultiSynq documentation and API access",
   authLevel: "PUBLIC" as const, // No auth required
   isSystem: true
 };

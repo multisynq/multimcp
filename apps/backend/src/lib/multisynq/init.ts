@@ -12,17 +12,11 @@ import {
 
 /**
  * Initialize MultiSynq MCP server, namespace, and endpoint
- * This creates a dedicated public endpoint for MultiSynq documentation
+ * This creates a dedicated root endpoint for MultiSynq documentation
  */
 export async function initializeMultiSynqEndpoint() {
   try {
-    console.log("🚀 Initializing MultiSynq MCP endpoint...");
-
-    // Check if Context7 API key is available
-    if (!process.env.CONTEXT7_API_KEY) {
-      console.log("⚠️  CONTEXT7_API_KEY not found - MultiSynq endpoint will not be functional");
-      console.log("   Add CONTEXT7_API_KEY to your environment variables to enable MultiSynq documentation");
-    }
+    console.log("🚀 Initializing MultiSynq MCP root endpoint...");
 
     // 1. Check if MultiSynq MCP server already exists
     let mcpServer = await mcpServersRepository.findByName(MULTISYNQ_SERVER_CONFIG.name);
@@ -43,30 +37,27 @@ export async function initializeMultiSynqEndpoint() {
       console.log(`📦 MultiSynq MCP server already exists: ${mcpServer.uuid}`);
     }
 
-    // 2. Check if MultiSynq namespace already exists
+    // 2. Check if root namespace already exists
     let namespace = await namespacesRepository.findByNameAndUserId(MULTISYNQ_NAMESPACE_CONFIG.name, null);
     
     if (!namespace) {
-      console.log("🏷️  Creating MultiSynq namespace...");
+      console.log("🏷️  Creating root namespace...");
       namespace = await namespacesRepository.create({
         name: MULTISYNQ_NAMESPACE_CONFIG.name,
         description: MULTISYNQ_NAMESPACE_CONFIG.description,
         mcpServerUuids: [mcpServer.uuid],
         user_id: null // System namespace (public)
       });
-      console.log(`✅ Created MultiSynq namespace: ${namespace.uuid}`);
+      console.log(`✅ Created root namespace: ${namespace.uuid}`);
     } else {
-      console.log(`🏷️  MultiSynq namespace already exists: ${namespace.uuid}`);
-      
-      // For now, skip the server mapping check since we need to understand the schema better
-      // The namespace should already have the server mapped if it was created properly
+      console.log(`🏷️  Root namespace already exists: ${namespace.uuid}`);
     }
 
-    // 3. Check if MultiSynq endpoint already exists
+    // 3. Check if root endpoint already exists
     let endpoint = await endpointsRepository.findByName(MULTISYNQ_ENDPOINT_CONFIG.name);
     
     if (!endpoint) {
-      console.log("🌐 Creating MultiSynq public endpoint...");
+      console.log("🌐 Creating root public endpoint...");
       endpoint = await endpointsRepository.create({
         name: MULTISYNQ_ENDPOINT_CONFIG.name,
         description: MULTISYNQ_ENDPOINT_CONFIG.description,
@@ -75,16 +66,16 @@ export async function initializeMultiSynqEndpoint() {
         use_query_param_auth: false,
         user_id: null // System endpoint (public)
       });
-      console.log(`✅ Created MultiSynq endpoint: ${endpoint.uuid}`);
+      console.log(`✅ Created root endpoint: ${endpoint.uuid}`);
     } else {
-      console.log(`🌐 MultiSynq endpoint already exists: ${endpoint.uuid}`);
+      console.log(`🌐 Root endpoint already exists: ${endpoint.uuid}`);
     }
 
-    console.log("🎉 MultiSynq MCP endpoint initialization complete!");
-    console.log("📋 Available endpoints:");
-    console.log(`   SSE: /metamcp/multisynq/sse`);
-    console.log(`   HTTP: /metamcp/multisynq/mcp`);
-    console.log(`   OpenAPI: /metamcp/multisynq/openapi`);
+    console.log("🎉 MultiSynq MCP root endpoint initialization complete!");
+    console.log("📋 Available at root endpoints:");
+    console.log(`   SSE: /sse`);
+    console.log(`   HTTP: /mcp`);
+    console.log(`   OpenAPI: /api`);
     
     return {
       mcpServer,
@@ -93,7 +84,7 @@ export async function initializeMultiSynqEndpoint() {
     };
     
   } catch (error) {
-    console.error("❌ Failed to initialize MultiSynq endpoint:", error);
+    console.error("❌ Failed to initialize MultiSynq root endpoint:", error);
     // Don't throw - we want the app to still start even if this fails
   }
 }
