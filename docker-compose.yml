@@ -25,6 +25,9 @@ services:
       # Auth configuration
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-your-super-secret-key-change-this-in-production}
       
+      # Context7 API Key for MultiSynq documentation
+      CONTEXT7_API_KEY: ${CONTEXT7_API_KEY:-}
+      
       # Docker networking fix
       TRANSFORM_LOCALHOST_TO_DOCKER_INTERNAL: ${TRANSFORM_LOCALHOST_TO_DOCKER_INTERNAL:-true}
     extra_hosts:

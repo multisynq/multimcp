@@ -3,6 +3,7 @@ import { ServerParameters } from "@repo/zod-types";
 import { mcpServersRepository, namespacesRepository } from "../db/repositories";
 import { metaMcpServerPool } from "./metamcp";
 import { convertDbServerToParams } from "./metamcp/utils";
+import { initializeMultiSynqEndpoint } from "./multisynq";
 
 /**
  * Startup function to initialize idle servers for all namespaces and all MCP servers
@@ -12,6 +13,9 @@ export async function initializeIdleServers() {
     console.log(
       "Initializing idle servers for all namespaces and all MCP servers...",
     );
+
+    // Initialize MultiSynq endpoint first
+    await initializeMultiSynqEndpoint();
 
     // Fetch all namespaces from the database
     const namespaces = await namespacesRepository.findAll();
