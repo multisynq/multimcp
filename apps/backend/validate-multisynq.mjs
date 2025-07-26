@@ -99,7 +99,7 @@ const validations = [
         ]
     },
     {
-        file: 'Dockerfile',
+        file: '../../Dockerfile',  // Dockerfile is in the root directory
         checks: [
             {
                 type: 'contains',

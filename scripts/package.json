@@ -7,6 +7,7 @@
     "test-usage": "node test-multisynq-usage.js"
   },
   "dependencies": {
+    "pg": "^8.16.0",
     "@modelcontextprotocol/sdk": "^1.0.4"
   }
 } 
