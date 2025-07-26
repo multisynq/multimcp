@@ -20,7 +20,7 @@ Once initialized, the following endpoints are available **at the root**:
 
 ## Setup
 
-1. **Install Context7 MCP Server**: The Dockerfile automatically installs `@context7/mcp-server`
+1. **Install Context7 MCP Server**: The Dockerfile automatically installs `@upstash/context7-mcp`
 
 2. **Deploy**: The MultiSynq root endpoint will be automatically created on startup
 

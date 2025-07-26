@@ -1,0 +1,12 @@
+{
+  "name": "multisynq-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Scripts for MultiSynq MCP Server",
+  "scripts": {
+    "test-usage": "node test-multisynq-usage.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  }
+} 

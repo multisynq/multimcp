@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the inspector functionality for MultiSynq
 describe('MultiSynq MCP Inspector Integration', () => {
@@ -31,7 +31,7 @@ describe('MultiSynq MCP Inspector Integration', () => {
           name: 'MultiSynq-Docs',
           type: 'STDIO',
           command: 'npx',
-          args: ['@context7/mcp-server'],
+          args: ['@upstash/context7-mcp'],
           env: {
             CONTEXT7_LIBRARY_ID: '/multisynq/docs'
           }
@@ -40,7 +40,7 @@ describe('MultiSynq MCP Inspector Integration', () => {
 
       expect(serverList).toHaveLength(1);
       expect(serverList[0].name).toBe('MultiSynq-Docs');
-      expect(serverList[0].args).toContain('@context7/mcp-server');
+      expect(serverList[0].args).toContain('@upstash/context7-mcp');
     });
   });
 
@@ -98,7 +98,7 @@ describe('MultiSynq MCP Inspector Integration', () => {
     it('should help troubleshoot Context7 connection issues', () => {
       // Test troubleshooting capabilities
       const troubleshootingSteps = [
-        'Check if @context7/mcp-server is installed',
+        'Check if @upstash/context7-mcp is installed',
         'Verify CONTEXT7_LIBRARY_ID is set to /multisynq/docs',
         'Test Context7 server can resolve library ID',
         'Check if MultiSynq documentation is accessible'

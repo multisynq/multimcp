@@ -89,7 +89,7 @@ RUN pnpm install --prod
 RUN cd apps/backend && pnpm add drizzle-kit@0.31.1
 
 # Install Context7 MCP server for MultiSynq docs
-RUN npm install -g @context7/mcp-server
+RUN npm install -g @upstash/context7-mcp
 
 # Copy startup script
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./

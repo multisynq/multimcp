@@ -63,7 +63,7 @@ describe('MultiSynq Initialization', () => {
         description: MULTISYNQ_SERVER_CONFIG.description,
         type: 'STDIO',
         command: 'npx',
-        args: ['@context7/mcp-server'],
+        args: ['@upstash/context7-mcp'],
         env: { CONTEXT7_LIBRARY_ID: '/multisynq/docs' },
         user_id: null
       });

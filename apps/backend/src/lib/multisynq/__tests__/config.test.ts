@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { 
-  MULTISYNQ_MCP_CONFIG,
-  MULTISYNQ_SERVER_CONFIG,
-  MULTISYNQ_NAMESPACE_CONFIG,
-  MULTISYNQ_ENDPOINT_CONFIG
+import { describe, expect, it } from 'vitest';
+import {
+    MULTISYNQ_ENDPOINT_CONFIG,
+    MULTISYNQ_MCP_CONFIG,
+    MULTISYNQ_NAMESPACE_CONFIG,
+    MULTISYNQ_SERVER_CONFIG
 } from '../config';
 
 describe('MultiSynq Configuration', () => {
@@ -12,7 +12,7 @@ describe('MultiSynq Configuration', () => {
       expect(MULTISYNQ_MCP_CONFIG).toEqual({
         type: 'STDIO',
         command: 'npx',
-        args: ['@context7/mcp-server'],
+        args: ['@upstash/context7-mcp'],
         env: {
           CONTEXT7_LIBRARY_ID: '/multisynq/docs'
         }
@@ -20,7 +20,7 @@ describe('MultiSynq Configuration', () => {
     });
 
     it('should use Context7 MCP server with MultiSynq library pre-configured', () => {
-      expect(MULTISYNQ_MCP_CONFIG.args).toContain('@context7/mcp-server');
+      expect(MULTISYNQ_MCP_CONFIG.args).toContain('@upstash/context7-mcp');
       expect(MULTISYNQ_MCP_CONFIG.env.CONTEXT7_LIBRARY_ID).toBe('/multisynq/docs');
     });
 

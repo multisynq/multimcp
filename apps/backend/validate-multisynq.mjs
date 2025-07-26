@@ -103,7 +103,7 @@ const validations = [
         checks: [
             {
                 type: 'contains',
-                value: '@context7/mcp-server',
+                value: '@upstash/context7-mcp',
                 description: 'Context7 MCP server installed'
             }
         ]

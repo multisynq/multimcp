@@ -107,7 +107,26 @@ else
 fi
 
 echo ""
-echo -e "${YELLOW}Step 4: Opening Inspector...${NC}"
+echo -e "${YELLOW}Step 4: Testing MultiSynq Usage...${NC}"
+echo "----------------------------------------"
+
+# Install dependencies for test script
+echo -e "${BLUE}Installing test dependencies...${NC}"
+cd scripts
+npm install --silent
+cd ..
+
+# Run usage tests
+echo -e "${BLUE}Running MultiSynq usage tests...${NC}"
+if node scripts/test-multisynq-usage.js; then
+    echo -e "${GREEN}✅ Usage tests passed!${NC}"
+else
+    echo -e "${RED}❌ Usage tests failed!${NC}"
+    echo -e "${YELLOW}Check if the MultiSynq endpoint is properly configured${NC}"
+fi
+
+echo ""
+echo -e "${YELLOW}Step 5: Opening Inspector...${NC}"
 echo "----------------------------------------"
 
 # Open the inspector in browser

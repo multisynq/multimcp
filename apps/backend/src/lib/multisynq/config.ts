@@ -1,9 +1,7 @@
-import { ServerParameters } from "@repo/zod-types";
-
-export const MULTISYNQ_MCP_CONFIG: ServerParameters = {
+export const MULTISYNQ_MCP_CONFIG = {
   type: "STDIO" as const,
   command: "npx",
-  args: ["@context7/mcp-server"],
+  args: ["@upstash/context7-mcp"],
   env: {
     // Pre-configure with MultiSynq library ID to avoid resolution step
     CONTEXT7_LIBRARY_ID: "/multisynq/docs",

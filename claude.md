@@ -35,7 +35,7 @@ This document details the complete implementation of MultiSynq's MCP (Model Cont
 {
   type: "STDIO",
   command: "npx", 
-  args: ["@context7/mcp-server"],
+      args: ["@upstash/context7-mcp"],
   env: {
     CONTEXT7_LIBRARY_ID: "/multisynq/docs"
   }

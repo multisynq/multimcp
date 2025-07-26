@@ -77,6 +77,57 @@ app.use(async (req, res, next) => {
 // Mount public endpoints routes (must be before JSON middleware to handle raw streams)
 app.use("/metamcp", publicEndpointsRouter);
 
+// Mount MultiSynq public endpoints at root (no auth required)
+// These routes must be configured before other routes to ensure they take precedence
+app.get("/sse", async (req, res, next) => {
+  // Forward to the public metamcp router for the root endpoint
+  req.url = "/root/sse";
+  publicEndpointsRouter(req, res, next);
+});
+
+app.get("/mcp", async (req, res, next) => {
+  // Forward to the public metamcp router for the root endpoint
+  req.url = "/root/mcp";
+  publicEndpointsRouter(req, res, next);
+});
+
+app.post("/mcp", async (req, res, next) => {
+  // Forward to the public metamcp router for the root endpoint
+  req.url = "/root/mcp";
+  publicEndpointsRouter(req, res, next);
+});
+
+app.post("/api", async (req, res, next) => {
+  // Forward to the public metamcp router for the root endpoint
+  req.url = "/root/api";
+  publicEndpointsRouter(req, res, next);
+});
+
+// Info endpoint for MultiSynq
+app.get("/", (req, res) => {
+  res.json({
+    service: "MultiSynq MCP Server",
+    description: "Public access to MultiSynq documentation via Context7",
+    endpoints: {
+      sse: "/sse - Server-Sent Events for MCP communication",
+      mcp: "/mcp - HTTP endpoint for MCP communication",
+      api: "/api - OpenAPI endpoint"
+    },
+    usage: {
+      claude: {
+        config: {
+          mcpServers: {
+            multisynq: {
+              command: "npx",
+              args: ["-y", "@modelcontextprotocol/server-sse", `${req.protocol}://${req.get('host')}/sse`]
+            }
+          }
+        }
+      }
+    }
+  });
+});
+
 // Mount MCP proxy routes
 app.use("/mcp-proxy", mcpProxyRouter);
 
