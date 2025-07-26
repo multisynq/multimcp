@@ -57,7 +57,14 @@ export const auth = betterAuth({
     "http://0.0.0.0",
     "http://0.0.0.0:3000",
     "http://0.0.0.0:12008",
-  ],
+    // Production origins for MultiSynq
+    "https://mcp.multisynq.io",
+    "https://multisynq.io",
+    "https://www.multisynq.io",
+    // Railway deployment URLs (will be replaced with actual URLs)
+    process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : "",
+    process.env.APP_URL || "",
+  ].filter(Boolean),
   plugins: [
     // Add generic OAuth plugin for OIDC support
     ...(oidcProviders.length > 0

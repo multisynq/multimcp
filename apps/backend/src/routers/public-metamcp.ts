@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 
 import { endpointsRepository } from "../db/repositories/endpoints.repo";
+import { publicEndpointRateLimit } from "../middleware/rate-limit.middleware";
 import { openApiRouter } from "./public-metamcp/openapi";
 import sseRouter from "./public-metamcp/sse";
 import streamableHttpRouter from "./public-metamcp/streamable-http";
@@ -23,22 +24,12 @@ publicEndpointsRouter.use(
   }),
 );
 
-// JSON parsing middleware specifically for OpenAPI routes that need it
-publicEndpointsRouter.use((req, res, next) => {
-  // Only apply JSON parsing for OpenAPI tool execution endpoints
-  if (req.path.includes("/api/tools/") && req.method === "POST") {
-    return express.json()(req, res, next);
-  }
-  next();
-});
+// Apply rate limiting to all public endpoints
+publicEndpointsRouter.use(publicEndpointRateLimit);
 
-// Use StreamableHTTP router for /mcp routes
-publicEndpointsRouter.use(streamableHttpRouter);
-
-// Use SSE router for /sse and /message routes
+// Mount sub-routers
 publicEndpointsRouter.use(sseRouter);
-
-// Use OpenAPI router for /api and /openapi.json routes
+publicEndpointsRouter.use(streamableHttpRouter);
 publicEndpointsRouter.use(openApiRouter);
 
 // Health check endpoint

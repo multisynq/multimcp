@@ -2,11 +2,16 @@ import express from "express";
 
 import { auth } from "./auth";
 import { initializeIdleServers } from "./lib/startup";
+import { removeSensitiveHeaders, securityHeaders } from "./middleware/security-headers.middleware";
 import mcpProxyRouter from "./routers/mcp-proxy";
 import publicEndpointsRouter from "./routers/public-metamcp";
 import trpcRouter from "./routers/trpc";
 
 const app = express();
+
+// Apply security headers to all routes
+app.use(securityHeaders);
+app.use(removeSensitiveHeaders);
 
 // Global JSON middleware for non-proxy routes
 app.use((req, res, next) => {
@@ -96,5 +101,16 @@ app.listen(12009, async () => {
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
+  });
+});
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    multisynq: {
+      endpoint: "/sse",
+      status: "ready"
+    }
   });
 });
