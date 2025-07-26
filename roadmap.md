@@ -1,8 +1,10 @@
-# MultiSynq MCP Integration - Development Roadmap
+# MultiSynq MCP Server - Development Roadmap
 
 ## Project Overview
 
 **Goal**: Create a zero-friction way for developers to educate AI tools about MultiSynq through a public MCP endpoint.
+
+**Repository**: https://github.com/multisynq/multimcp
 
 **Status**: ✅ **Phase 6 Ready** - Production Deployment Prepared
 **Current Phase**: Phase 6 - Production Deployment on Railway
@@ -298,7 +300,8 @@
 ✅ Security Middleware: 2 new middleware files
 ✅ Health Check: Added /api/health endpoint
 ✅ Database Scripts: Added all missing db:* scripts
-Total: 37+ files implemented/modified
+✅ Local Setup Scripts: 3 new scripts (setup-local-env.sh, run-local.sh, setup-and-run.sh)
+Total: 40+ files implemented/modified
 ```
 
 ### Security Improvements
@@ -396,9 +399,121 @@ railway up
 
 ---
 
+## 🎯 MultiSynq MCP Server Customizations
+
+### Purpose
+The MultiSynq MCP Server provides AI tools (Claude, Cursor, Cline, etc.) with direct access to MultiSynq documentation and knowledge, enabling them to understand and work with MultiSynq's activity-based architecture.
+
+### Key Customizations
+
+#### 1. Pre-configured MultiSynq Integration
+- **Context7 MCP Server**: Pre-installed with MultiSynq documentation (`/multisynq/docs`)
+- **Public Endpoints**: Root-level access at `/sse`, `/mcp`, and `/api`
+- **Zero Configuration**: Works out of the box without setup
+
+#### 2. Security Enhancements
+- **Rate Limiting**: 100 requests/minute on public endpoints
+- **Security Headers**: Comprehensive security headers middleware
+- **CORS Configuration**: Configured for MultiSynq domains
+
+#### 3. Production Optimizations
+- **Railway Deployment**: One-click deployment configuration
+- **Health Checks**: Enhanced health endpoint with MultiSynq status
+- **Docker Optimization**: Pre-built with all dependencies
+
+### Files Modified/Added
+
+#### Core Integration
+- `apps/backend/src/lib/multisynq/` - MultiSynq integration module
+- `apps/backend/src/lib/startup.ts` - Auto-initialization on startup
+- `Dockerfile` - Added Context7 MCP server
+
+#### Security & Middleware
+- `apps/backend/src/middleware/rate-limit.middleware.ts` - Rate limiting
+- `apps/backend/src/middleware/security-headers.middleware.ts` - Security headers
+
+#### Documentation
+- `README.md` - Rebranded for MultiSynq MCP Server
+- `LOCAL_TESTING_GUIDE.md` - Local development instructions
+- `RAILWAY_DEPLOYMENT.md` - Production deployment guide
+- `PRODUCTION_CHECKLIST.md` - Pre-deployment checklist
+- `QUICK_REFERENCE.md` - Command reference
+
+#### Configuration
+- `railway.json` - Railway deployment configuration
+- `docker-compose.yml` - Updated for MultiSynq
+- Enhanced package.json scripts for easier development
+
+### Usage for AI Tools
+
+```json
+{
+  "mcpServers": {
+    "multisynq": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sse", "https://mcp.multisynq.io/sse"]
+    }
+  }
+}
+```
+
+### Available Tools
+The server provides a `search` tool that can query MultiSynq documentation:
+
+```javascript
+// Example queries
+search("what is multisynq")
+search("how to create an activity")
+search("timeline synchronization")
+search("authentication in multisynq")
+```
+
+### Local Development Scripts
+
+#### Setup Scripts
+- `scripts/setup-local-env.sh` - Complete Ubuntu environment setup (PostgreSQL, Node.js, dependencies)
+  - Creates metamcp_user with password m3t4mcp
+  - Creates metamcp_db database
+  - Handles idempotent execution (can be run multiple times)
+- `scripts/run-local.sh` - Start backend and frontend servers locally
+  - Loads environment variables from .env
+  - Ensures PostgreSQL is running
+  - Passes DATABASE_URL to backend process
+- `scripts/setup-and-run.sh` - Master script: setup, test, run, and open inspector
+  - Runs full environment setup
+  - Executes tests (excluding Playwright tests from Vitest)
+  - Starts servers and opens browser
+
+#### Quick Start (Fresh Ubuntu)
+```bash
+# Clone the repository
+git clone https://github.com/multisynq/multimcp.git
+cd multimcp
+
+# Run the master setup script
+./scripts/setup-and-run.sh
+```
+
+This will:
+1. Install PostgreSQL, Node.js, and all dependencies
+2. Create metamcp_user/m3t4mcp and metamcp_db database
+3. Build the project
+4. Run tests (unit and integration)
+5. Start the servers with proper environment variables
+6. Open the inspector in your browser
+
+#### Database Configuration
+- User: metamcp_user
+- Password: m3t4mcp
+- Database: metamcp_db
+- Host: localhost
+- Port: 5432
+
+---
+
 ## 🏁 Conclusion
 
-The MultiSynq MCP integration implementation is **100% complete** and **production-ready**. All technical work is finished:
+The MultiSynq MCP Server is **100% complete** and **production-ready**. All technical work is finished:
 
 ✅ **Core Implementation**: Complete with MultiSynq integration
 ✅ **Testing**: Comprehensive test coverage at all levels  
@@ -407,6 +522,7 @@ The MultiSynq MCP integration implementation is **100% complete** and **producti
 ✅ **Configuration**: Railway deployment fully configured
 ✅ **Local Development**: Complete setup instructions with database scripts
 ✅ **Docker Compatibility**: Verified Railway + PostgreSQL compatibility
+✅ **Customizations**: Fully documented MultiSynq-specific modifications
 
 **Remaining Work**: Only deployment tasks remain:
 1. Configure Railway environment variables
@@ -418,6 +534,11 @@ The MultiSynq MCP integration implementation is **100% complete** and **producti
 - All database scripts (`db:push`, `db:studio`, etc.) added
 - Quick start guide in main README
 - Docker and local development paths supported
+- Based on MetaMCP with MultiSynq-specific enhancements
+
+**Repository**: https://github.com/multisynq/multimcp
+**Based on**: MetaMCP (https://github.com/metatool-ai/metamcp)
+**License**: MIT
 
 **Estimated time to production**: 1-2 hours (deployment only)
 **Risk level**: Very Low (all technical work complete)

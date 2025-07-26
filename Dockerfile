@@ -53,11 +53,11 @@ FROM base AS runner
 WORKDIR /app
 
 # OCI image labels
-LABEL org.opencontainers.image.source="https://github.com/metatool-ai/metamcp"
-LABEL org.opencontainers.image.description="MetaMCP - aggregates MCP servers into a unified MetaMCP"
+LABEL org.opencontainers.image.source="https://github.com/multisynq/multimcp"
+LABEL org.opencontainers.image.description="MultiSynq MCP Server - Provides AI tools with access to MultiSynq documentation"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.title="MetaMCP"
-LABEL org.opencontainers.image.vendor="metatool-ai"
+LABEL org.opencontainers.image.title="MultiSynq MCP Server"
+LABEL org.opencontainers.image.vendor="MultiSynq"
 
 # Install curl for health checks
 RUN apt-get update && apt-get install -y curl postgresql-client && apt-get clean && rm -rf /var/lib/apt/lists/*

@@ -1,15 +1,15 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { initializeMultiSynqEndpoint } from '../init';
-import { 
-  mcpServersRepository, 
-  namespacesRepository, 
-  endpointsRepository 
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+    endpointsRepository,
+    mcpServersRepository,
+    namespacesRepository
 } from '../../../db/repositories';
-import { 
-  MULTISYNQ_SERVER_CONFIG,
-  MULTISYNQ_NAMESPACE_CONFIG,
-  MULTISYNQ_ENDPOINT_CONFIG
+import {
+    MULTISYNQ_ENDPOINT_CONFIG,
+    MULTISYNQ_NAMESPACE_CONFIG,
+    MULTISYNQ_SERVER_CONFIG
 } from '../config';
+import { initializeMultiSynqEndpoint } from '../init';
 
 // Mock the repositories
 vi.mock('../../../db/repositories', () => ({
@@ -120,11 +120,11 @@ describe('MultiSynq Initialization', () => {
       // Arrange
       vi.mocked(mcpServersRepository.findByName).mockRejectedValue(new Error('Database error'));
 
-      // Act & Assert
-      expect(async () => {
-        await initializeMultiSynqEndpoint();
-      }).not.toThrow();
+      // Act
+      const result = await initializeMultiSynqEndpoint();
 
+      // Assert
+      expect(result).toBeUndefined();
       expect(console.error).toHaveBeenCalledWith(
         "❌ Failed to initialize MultiSynq root endpoint:",
         expect.any(Error)

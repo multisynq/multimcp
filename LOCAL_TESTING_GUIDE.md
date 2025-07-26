@@ -59,7 +59,7 @@ docker run -d \
 
 ```bash
 # From project root
-cd metamcp  # or wherever you cloned the repo
+cd multimcp  # or wherever you cloned the repo
 
 # Create local environment file
 cat > .env.local << EOF

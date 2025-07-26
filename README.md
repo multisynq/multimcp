@@ -1,33 +1,38 @@
-# 🚀 MetaMCP (MCP Aggregator, Orchestrator, Middleware, Gateway in one docker)
+# 🚀 MultiSynq MCP Server
 
 <div align="center">
 
 <div align="center">
-  <a href="https://discord.gg/mNsyat7mFX" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Discord-MetaMCP-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord" style="max-width: 100%;">
+  <a href="https://multisynq.io" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/MultiSynq-MCP_Server-7C3AED?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMyA3VjE3TDEyIDIyTDIxIDE3VjdMMTIgMloiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=" alt="MultiSynq" style="max-width: 100%;">
   </a>
-  <a href="https://docs.metamcp.com" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Documentation-docs.metamcp.com-blue?style=flat-square&logo=book" alt="Documentation" style="max-width: 100%;">
+  <a href="https://github.com/multisynq/multimcp" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/GitHub-multisynq%2Fmultimcp-181717?style=flat-square&logo=github" alt="GitHub" style="max-width: 100%;">
   </a>
   <a href="https://opensource.org/licenses/MIT" style="text-decoration: none;">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="MIT License" style="max-width: 100%;">
   </a>
-  <a href="https://github.com/metatool-ai/metamcp/pkgs/container/metamcp" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/GHCR-available-green.svg?style=flat-square&logo=github" alt="GHCR" style="max-width: 100%;">
+  <a href="https://railway.app" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/Deploy-Railway-0B0D0E?style=flat-square&logo=railway" alt="Railway" style="max-width: 100%;">
   </a>
 </div>
 
 </div>
 
-**MetaMCP** is a MCP proxy that lets you dynamically aggregate MCP servers into a unified MCP server, and apply middlewares. MetaMCP itself is a MCP server so it can be easily plugged into **ANY** MCP clients.
+**MultiSynq MCP Server** is a customized MCP (Model Context Protocol) server that provides seamless access to MultiSynq documentation and capabilities. Built on MetaMCP, it extends the platform with pre-configured MultiSynq integration, allowing AI tools to understand and work with MultiSynq's activity-based architecture.
 
-![MetaMCP Diagram](metamcp.svg)
+## 🌟 Key Features
+
+- **🔍 MultiSynq Documentation Access**: Pre-configured Context7 integration for instant access to MultiSynq docs
+- **🚀 Zero Configuration**: Works out of the box with public endpoints at `/sse`, `/mcp`, and `/api`
+- **🔐 Flexible Authentication**: Supports both public access and API key authentication
+- **🛠️ Developer Friendly**: Built-in MCP Inspector for testing and debugging
+- **📦 Production Ready**: Includes rate limiting, security headers, and health checks
+- **☁️ Railway Deployable**: One-click deployment to Railway with PostgreSQL
 
 ---
 
-For more details, consider visiting our documentation site: https://docs.metamcp.com
-
-English | [中文](./README_cn.md)
+> **Note**: This is a customized fork of [MetaMCP](https://github.com/metatool-ai/metamcp) specifically tailored for MultiSynq's needs.
 
 ## 📋 Table of Contents
 
@@ -63,17 +68,24 @@ English | [中文](./README_cn.md)
 - [🙏 Credits](#-credits)
 
 
-## 🎯 Use Cases
-- 🏷️ **Group MCP servers into namespaces, host them as meta-MCPs, and assign public endpoints** (SSE or Streamable HTTP), with auth. One-click to switch a namespace for an endpoint.
--  🎯 **Pick tools you only need when remixing MCP servers.** Apply other **pluggable middleware** around observability, security, etc. (coming soon)
--  🔍 **Use as enhanced MCP inspector** with saved server configs, and inspect your MetaMCP endpoints in house to see if it works or not.
--  🔍 **Use as Elasticsearch for MCP tool selection** (coming soon)
+## 🎯 What is MultiSynq MCP Server?
 
-Generally developers can use MetaMCP as **infrastructure** to host dynamically composed MCP servers through a unified endpoint, and build agents on top of it.
+The MultiSynq MCP Server enables AI tools like Claude, Cursor, and Cline to understand and work with MultiSynq's activity-based architecture. It provides:
 
-Quick demo video: https://youtu.be/Cf6jVd2saAs
+- **📚 Instant Documentation Access**: AI tools can search and retrieve MultiSynq documentation
+- **🔧 Activity Patterns**: Understand how to implement activities, timelines, and sync
+- **🏗️ Architecture Guidance**: Get best practices for building with MultiSynq
+- **🚀 Code Examples**: Access real-world examples and implementation patterns
 
-![MetaMCP Screenshot](metamcp_screenshot.png)
+### How It Works
+
+```mermaid
+graph LR
+    A[AI Tool] -->|MCP Protocol| B[MultiSynq MCP Server]
+    B -->|Context7| C[MultiSynq Docs]
+    B -->|Returns| D[Relevant Information]
+    D --> A
+```
 
 ## 📖 Concepts
 
@@ -115,8 +127,8 @@ For local development with MultiSynq integration:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/metatool-ai/metamcp.git
-cd metamcp
+git clone https://github.com/multisynq/multimcp.git
+cd multimcp
 
 # 2. Install dependencies
 pnpm install
@@ -163,8 +175,8 @@ For detailed instructions, see [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md)
 Clone repo, prepare `.env`, and start with docker compose:
 
 ```bash
-git clone https://github.com/metatool-ai/metamcp.git
-cd metamcp
+git clone https://github.com/multisynq/multimcp.git
+cd multimcp
 cp example.env .env
 # Edit .env with your configuration
 docker compose up -d
@@ -198,87 +210,89 @@ If you have questions, feel free to leave **GitHub issues** or **PRs**.
 
 ## 🔗 Connect to MetaMCP
 
-### 📝 E.g., Cursor via mcp.json
+### 📝 Connecting to MultiSynq MCP Server
 
-Example `mcp.json`
+#### For Cursor (via mcp.json)
 
 ```json
 {
   "mcpServers": {
-    "MetaMCP": {
-      "url": "http://localhost:12008/metamcp/<YOUR_ENDPOINT_NAME>/sse"
+    "multisynq": {
+      "url": "http://localhost:12008/sse"
     }
   }
 }
 ```
 
-### 🖥️ Connecting Claude Desktop and Other STDIO-only Clients
-
-Since MetaMCP endpoints are remote only (SSE, Streamable HTTP, OpenAPI), clients that only support stdio servers (like Claude Desktop) need a local proxy to connect.
-
-**Note:** While `mcp-remote` is sometimes suggested for this purpose, it's designed for OAuth-based authentication and doesn't work with MetaMCP's API key authentication. Based on testing, `mcp-proxy` is the recommended solution.
-
-Here's a working configuration for Claude Desktop using `mcp-proxy`:
-
-Using Streamable HTTP
+Or for production:
 
 ```json
 {
   "mcpServers": {
-    "MetaMCP": {
-      "command": "uvx",
-      "args": [
-        "mcp-proxy",
-        "--transport",
-        "streamablehttp",
-        "http://localhost:12008/metamcp/<YOUR_ENDPOINT_NAME>/mcp"
-      ],
-      "env": {
-        "API_ACCESS_TOKEN": "<YOUR_API_KEY_HERE>"
-      }
+    "multisynq": {
+      "url": "https://mcp.multisynq.io/sse"
     }
   }
 }
 ```
 
-Using SSE
+#### For Claude Desktop
+
+Since the MultiSynq MCP Server uses SSE (Server-Sent Events), Claude Desktop needs the MCP SSE client:
 
 ```json
 {
   "mcpServers": {
-    "ehn": {
-      "command": "uvx",
-      "args": [
-        "mcp-proxy",
-        "http://localhost:12008/metamcp/<YOUR_ENDPOINT_NAME>/sse"
-      ],
-      "env": {
-        "API_ACCESS_TOKEN": "<YOUR_API_KEY_HERE>"
-      }
+    "multisynq": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sse", "http://localhost:12008/sse"]
     }
   }
 }
 ```
 
-**Important notes:**
-- Replace `<YOUR_ENDPOINT_NAME>` with your actual endpoint name
-- Replace `<YOUR_API_KEY_HERE>` with your MetaMCP API key (format: `sk_mt_...`)
+Or for production:
 
-For more details and alternative approaches, see [issue #76](https://github.com/metatool-ai/metamcp/issues/76#issuecomment-3046707532).
+```json
+{
+  "mcpServers": {
+    "multisynq": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sse", "https://mcp.multisynq.io/sse"]
+    }
+  }
+}
+```
 
-### 🔧 API Key Auth Troubleshooting
+#### For Cline (VS Code Extension)
 
-- `?api_key=` param api key auth doesn't work for SSE. It only works for Streamable HTTP and OpenAPI.
-- Best practice is to use the API key in `Authorization: Bearer <API_KEY>` header.
-- Try disable auth temporarily when you face connection issues to see if it is an auth issue.
+Add to your Cline settings:
 
-## ❄️ Cold Start Problem and Custom Dockerfile
+```json
+{
+  "multisynq": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-sse", "http://localhost:12008/sse"]
+  }
+}
+```
 
-- MetaMCP pre-allocate idle sessions for each configured MCP servers and MetaMCPs. The default idle session for each is 1 and that can help reduce cold start time.
-- If your MCP requires dependencies other than `uvx` or `npx`, you need to customize the Dockerfile to install dependencies on your own.
-- Check [invalidation.md](invalidation.md) for a seq diagram about how idle session invalidates during updates.
+### 🔧 Authentication Notes
 
-🛠️ **Solution**: Customize the Dockerfile to add dependencies or pre-install packages to reduce cold start time.
+The MultiSynq MCP Server's public endpoints (`/sse`, `/mcp`, `/api`) are configured for **public access** by default - no authentication required! This makes it easy to get started.
+
+For production deployments, you can enable API key authentication through the dashboard.
+
+## 🚀 Production Deployment
+
+The MultiSynq MCP Server is optimized for production deployment on Railway:
+
+- **Pre-configured**: Context7 MCP server is pre-installed in the Docker image
+- **Fast startup**: Idle sessions pre-allocated for instant response
+- **Health checks**: Built-in health endpoints for monitoring
+- **Auto-scaling**: Works seamlessly with Railway's scaling features
+
+See [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) for detailed deployment instructions.
 
 ## 🔐 Authentication
 
@@ -338,70 +352,69 @@ Since MCP leverages SSE for long connection, if you are using reverse proxy like
 
 ## 🏗️ Architecture
 
-- **Frontend**: Next.js
-- **Backend**: Express.js with tRPC, hosting MCPs through TS SDK and internal proxy
-- **Auth**: Better Auth
-- **Structure**: Standalone monorepo with Turborepo and Docker publishing
+The MultiSynq MCP Server is built with:
 
-### 📊 Sequence Diagram
+- **Frontend**: Next.js with MCP Inspector for testing
+- **Backend**: Express.js with tRPC and MultiSynq integration
+- **Database**: PostgreSQL for configuration and state
+- **MCP Integration**: Context7 for MultiSynq documentation access
+- **Deployment**: Docker + Railway for production
 
-*Note: Prompts and resources follow similar patterns to tools.*
+### 📊 How MultiSynq Integration Works
 
 ```mermaid
 sequenceDiagram
-    participant MCPClient as MCP Client (e.g., Claude Desktop)
-    participant MetaMCP as MetaMCP Server
-    participant MCPServers as Installed MCP Servers
+    participant AI as AI Tool (Claude/Cursor)
+    participant MCP as MultiSynq MCP Server
+    participant C7 as Context7
+    participant Docs as MultiSynq Docs
 
-    MCPClient ->> MetaMCP: Request list tools
-
-    loop For each listed MCP Server
-        MetaMCP ->> MCPServers: Request list_tools
-        MCPServers ->> MetaMCP: Return list of tools
-    end
-
-    MetaMCP ->> MetaMCP: Aggregate tool lists & apply middleware
-    MetaMCP ->> MCPClient: Return aggregated list of tools
-
-    MCPClient ->> MetaMCP: Call tool
-    MetaMCP ->> MCPServers: call_tool to target MCP Server
-    MCPServers ->> MetaMCP: Return tool response
-    MetaMCP ->> MCPClient: Return tool response
+    AI ->> MCP: search("how to create activity")
+    MCP ->> C7: Query MultiSynq documentation
+    C7 ->> Docs: Retrieve relevant sections
+    Docs ->> C7: Return documentation
+    C7 ->> MCP: Formatted results
+    MCP ->> AI: Activity creation guide + examples
 ```
 
 ## 🗺️ Roadmap
 
-**Potential next steps:**
+**Current Status**: ✅ Production Ready with MultiSynq Integration
 
-- [ ] 🔌 Headless Admin API access
-- [ ] 🔍 Dynamically apply search rules on MetaMCP endpoints
-- [ ] 🛠️ More middlewares
-- [ ] 💬 Chat/Agent Playground
-- [ ] 🧪 Testing & Evaluation for MCP tool selection optimization
-- [ ] ⚡ Dynamically generate MCP servers
+**Completed Features**:
+- ✅ MultiSynq documentation access via Context7
+- ✅ Public endpoints at `/sse`, `/mcp`, `/api`
+- ✅ Rate limiting and security headers
+- ✅ Railway deployment configuration
+- ✅ Comprehensive test coverage
+- ✅ MCP Inspector integration
 
-## 🌐 i18n
-
-See [README-i18n.md](README-i18n.md)
-
-Currently en and zh locale are supported, but welcome contributions.
+**Future Enhancements**:
+- [ ] 🔍 Enhanced search capabilities for MultiSynq patterns
+- [ ] 📚 Additional MultiSynq-specific tools
+- [ ] 🧪 Integration with MultiSynq playground
+- [ ] 📊 Usage analytics and insights
 
 ## 🤝 Contributing
 
-We welcome contributions! See details at **[CONTRIBUTING.md](CONTRIBUTING.md)**
+We welcome contributions! This is an open-source project maintained by MultiSynq.
+
+- **Report Issues**: [GitHub Issues](https://github.com/multisynq/multimcp/issues)
+- **Submit PRs**: [GitHub Pull Requests](https://github.com/multisynq/multimcp/pulls)
+- **Documentation**: Improvements to docs always welcome!
 
 ## 📄 License
 
-**MIT**
+**MIT** - See [LICENSE](LICENSE) file for details.
 
-Would appreciate if you mentioned with back links if your projects use the code.
+## 🙏 Acknowledgments
 
-## 🙏 Credits
+This project is built on top of the excellent [MetaMCP](https://github.com/metatool-ai/metamcp) platform. Special thanks to:
 
-Some code inspired by:
-- [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
-- [MCP Proxy Server](https://github.com/adamwattis/mcp-proxy-server)
+- The MetaMCP team for creating the foundational MCP aggregation platform
+- The Model Context Protocol team for the MCP specification
+- Context7 for enabling seamless documentation access
 
-Not directly used the code by took ideas from
-- https://github.com/open-webui/openapi-servers
-- https://github.com/open-webui/mcpo
+---
+
+**Built with ❤️ by [MultiSynq](https://multisynq.io)**

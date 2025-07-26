@@ -1,7 +1,9 @@
 services:
   app:
-    container_name: metamcp
-    image: ghcr.io/metatool-ai/metamcp:latest
+    container_name: multisynq-mcp
+    build: .
+    # Or use pre-built image when available:
+    # image: ghcr.io/multisynq/multimcp:latest
     pull_policy: always
     env_file:
       - .env

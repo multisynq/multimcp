@@ -6,8 +6,8 @@
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/metatool-ai/metamcp.git
-cd metamcp
+git clone https://github.com/multisynq/multimcp.git
+cd multimcp
 pnpm install
 
 # 2. Set up PostgreSQL (choose one)
