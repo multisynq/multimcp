@@ -5,87 +5,163 @@ This guide explains how to run and test the MultiSynq MCP integration locally.
 ## Prerequisites
 
 - Node.js 18+ and pnpm installed
-- Docker and Docker Compose installed
+- PostgreSQL 14+ (for local development)
+- Docker and Docker Compose (optional, for containerized setup)
 - Git repository cloned
 
-## Quick Start
+## Local Database Setup
 
-### Option 1: Using Docker (Recommended)
+### Option 1: Install PostgreSQL Locally (Recommended for Development)
 
-1. **Start the application with Docker Compose:**
-   ```bash
-   # From the project root
-   docker-compose up -d
-   ```
+```bash
+# Ubuntu/Debian
+sudo apt update
+sudo apt install postgresql postgresql-contrib
 
-2. **Wait for services to start:**
-   ```bash
-   # Check logs
-   docker-compose logs -f app
-   
-   # Wait until you see:
-   # "✅ MultiSynq root endpoint initialized successfully"
-   ```
+# macOS
+brew install postgresql
+brew services start postgresql
 
-3. **Verify it's running:**
-   ```bash
-   # Health check
-   curl http://localhost:12008/api/health
-   
-   # Should return:
-   # {
-   #   "status": "ok",
-   #   "timestamp": "...",
-   #   "multisynq": {
-   #     "endpoint": "/sse",
-   #     "status": "ready"
-   #   }
-   # }
-   ```
+# Start PostgreSQL service
+sudo systemctl start postgresql  # Linux
+brew services start postgresql    # macOS
+```
 
-### Option 2: Running Locally (Development)
+### Create Database and User
 
-1. **Install dependencies:**
-   ```bash
-   pnpm install
-   pnpm build
-   ```
+```bash
+# Access PostgreSQL prompt
+sudo -u postgres psql
 
-2. **Start PostgreSQL:**
-   ```bash
-   # Start only the database
-   docker-compose up -d postgres
-   ```
+# Create user and database
+CREATE USER metamcp_user WITH PASSWORD 'm3t4mcp';
+CREATE DATABASE metamcp_db OWNER metamcp_user;
+GRANT ALL PRIVILEGES ON DATABASE metamcp_db TO metamcp_user;
+\q
+```
 
-3. **Set up environment variables:**
-   ```bash
-   # Copy example env file
-   cp .env.example .env
-   
-   # Edit .env and ensure these are set:
-   DATABASE_URL=postgresql://metamcp_user:m3t4mcp@localhost:9433/metamcp_db
-   BETTER_AUTH_SECRET=your-local-dev-secret-key
-   APP_URL=http://localhost:12008
-   NEXT_PUBLIC_APP_URL=http://localhost:12008
-   ```
+### Option 2: Use Docker for PostgreSQL Only
 
-4. **Run database migrations:**
-   ```bash
-   cd apps/backend
-   pnpm db:push
-   ```
+```bash
+# Start PostgreSQL container
+docker run -d \
+  --name metamcp-postgres \
+  -e POSTGRES_USER=metamcp_user \
+  -e POSTGRES_PASSWORD=m3t4mcp \
+  -e POSTGRES_DB=metamcp_db \
+  -p 5432:5432 \
+  postgres:16-alpine
+```
 
-5. **Start the backend:**
-   ```bash
-   # In apps/backend
-   pnpm dev
-   ```
+## Quick Start - Local Development
 
-6. **Start the frontend (in a new terminal):**
-   ```bash
-   # In apps/frontend
-   pnpm dev
-   ```
+### 1. Set Up Environment Variables
+
+```bash
+# From project root
+cd metamcp  # or wherever you cloned the repo
+
+# Create local environment file
+cat > .env.local << EOF
+# Database Configuration (Local PostgreSQL)
+DATABASE_URL=postgresql://metamcp_user:m3t4mcp@localhost:5432/metamcp_db
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=metamcp_user
+POSTGRES_PASSWORD=m3t4mcp
+POSTGRES_DB=metamcp_db
+
+# Application Configuration
+APP_URL=http://localhost:12008
+NEXT_PUBLIC_APP_URL=http://localhost:12008
+NODE_ENV=development
+
+# Authentication (use a secure key in production!)
+BETTER_AUTH_SECRET=dev-secret-key-change-in-production-at-least-32-chars
+
+# Optional: Enable debug logging
+LOG_LEVEL=debug
+EOF
+
+# Copy to root .env for convenience
+cp .env.local .env
+```
+
+### 2. Install Dependencies and Build
+
+```bash
+# From project root
+pnpm install
+
+# Build all packages
+pnpm build
+```
+
+### 3. Initialize Database
+
+```bash
+# From project root, you can use the convenience script
+pnpm db:push:dev
+
+# OR navigate to backend and run directly
+cd apps/backend
+pnpm db:push:dev
+
+# Optional: Open database GUI (from project root)
+pnpm db:studio:dev
+```
+
+### 4. Start Development Servers
+
+```bash
+# Option 1: From project root (opens two terminals)
+pnpm dev:backend  # Terminal 1
+pnpm dev:frontend # Terminal 2
+
+# Option 2: Navigate to each app
+cd apps/backend && pnpm dev   # Terminal 1
+cd apps/frontend && pnpm dev  # Terminal 2
+```
+
+### 5. Verify Installation
+
+```bash
+# Test health endpoint
+curl http://localhost:12008/api/health
+
+# Expected response:
+{
+  "status": "ok",
+  "timestamp": "2024-07-25T...",
+  "multisynq": {
+    "endpoint": "/sse",
+    "status": "ready"
+  }
+}
+```
+
+## Docker Compose Setup (Full Stack)
+
+### 1. Using Docker Compose
+
+```bash
+# From project root
+docker compose up -d
+
+# Check logs
+docker compose logs -f app
+
+# Wait for: "✅ MultiSynq root endpoint initialized successfully"
+```
+
+### 2. Railway-Compatible Docker Setup
+
+The Docker configuration is designed to work seamlessly with Railway:
+
+- **Database**: Railway automatically provisions PostgreSQL
+- **Environment Variables**: Railway injects `DATABASE_URL` and other variables
+- **Migrations**: The `docker-entrypoint.sh` script runs migrations automatically
+- **Health Checks**: Built-in health check endpoint at `/api/health`
 
 ## Testing MultiSynq Integration
 
@@ -95,11 +171,14 @@ This guide explains how to run and test the MultiSynq MCP integration locally.
 # Test SSE endpoint
 curl http://localhost:12008/sse
 
-# Test MCP endpoint
+# Test MCP endpoint  
 curl http://localhost:12008/mcp
 
 # Test API documentation
 curl http://localhost:12008/api
+
+# Test health with MultiSynq status
+curl http://localhost:12008/api/health
 ```
 
 ### 2. Use MCP Inspector
@@ -161,8 +240,8 @@ curl http://localhost:12008/api
 
 Once connected via MCP Inspector or an AI tool, test these queries:
 
-```bash
-# Example tool calls to test
+```javascript
+// Example tool calls to test
 {
   "tool": "search",
   "query": "what is multisynq"
@@ -179,24 +258,95 @@ Once connected via MCP Inspector or an AI tool, test these queries:
 }
 ```
 
-## Running Tests
+## Available Scripts
 
-### Unit Tests
+### Root-Level Scripts (run from project root)
+
 ```bash
-cd apps/backend
-pnpm test:multisynq
+# Development
+pnpm dev              # Start both frontend and backend with hot reload
+pnpm dev:backend      # Start only backend
+pnpm dev:frontend     # Start only frontend
+
+# Building
+pnpm build            # Build all packages
+pnpm clean            # Clean all build artifacts
+
+# Database (convenience scripts)
+pnpm db:push:dev      # Push schema to local database
+pnpm db:studio:dev    # Open Prisma Studio GUI
+pnpm db:push          # Push schema (uses .env)
+pnpm db:studio        # Open Prisma Studio (uses .env)
+
+# Testing
+pnpm test:multisynq   # Run MultiSynq tests
+pnpm test:playwright  # Run browser tests
+
+# Docker
+pnpm docker:up        # Start with docker compose
+pnpm docker:down      # Stop docker services
+pnpm docker:logs      # View docker logs
+
+# Linting
+pnpm lint             # Run linting
+pnpm lint:fix         # Fix linting issues
 ```
 
-### Validation Script
+### Backend Scripts (in apps/backend)
+
 ```bash
-cd apps/backend
-node validate-multisynq.mjs
+# Development
+pnpm dev              # Start development server with hot reload
+
+# Database Management
+pnpm db:push:dev      # Push schema to local database
+pnpm db:studio:dev    # Open Prisma Studio GUI
+pnpm db:generate:dev  # Generate Prisma client
+pnpm db:migrate:dev   # Run migrations
+pnpm db:reset         # Reset and seed database
+
+# Testing
+pnpm test:multisynq   # Run MultiSynq tests
+pnpm test             # Run all tests
+pnpm test:playwright  # Run browser tests
+
+# Building
+pnpm build            # Build for production
+pnpm start            # Start production build
 ```
 
-### Browser Tests (if browsers installed)
+## Database Management
+
+### View Database with Prisma Studio
+
+```bash
+# From project root
+pnpm db:studio:dev
+
+# OR from backend directory
+cd apps/backend
+pnpm db:studio:dev
+
+# Opens at http://localhost:5555
+```
+
+### Reset Database
+
 ```bash
 cd apps/backend
-pnpm exec playwright test
+pnpm db:reset
+```
+
+### Manual Database Operations
+
+```bash
+# Connect to PostgreSQL
+psql -U metamcp_user -d metamcp_db -h localhost
+
+# Common queries
+\dt                    # List all tables
+\d+ "table_name"      # Describe table
+SELECT * FROM users;   # Query data
 ```
 
 ## Troubleshooting
@@ -212,59 +362,118 @@ pnpm exec playwright test
 
 2. **Database connection errors:**
    ```bash
-   # Check if postgres is running
-   docker-compose ps
+   # Check PostgreSQL is running
+   sudo systemctl status postgresql  # Linux
+   brew services list                 # macOS
    
-   # Restart postgres
-   docker-compose restart postgres
+   # Check connection
+   psql -U metamcp_user -d metamcp_db -h localhost -c "SELECT 1"
+   
+   # Common fix: ensure PostgreSQL is listening on localhost
+   # Edit postgresql.conf and set: listen_addresses = 'localhost'
    ```
 
-3. **MCP connection fails:**
-   - Check if backend is running: `curl http://localhost:12008/health`
-   - Check browser console for CORS errors
-   - Ensure you're using the correct URL
+3. **pnpm command not found:**
+   ```bash
+   # Install pnpm
+   npm install -g pnpm
+   # or
+   curl -fsSL https://get.pnpm.io/install.sh | sh -
+   ```
 
-4. **MultiSynq endpoint not initialized:**
-   - Check logs: `docker-compose logs app | grep -i multisynq`
-   - The initialization happens on startup automatically
+4. **Build errors:**
+   ```bash
+   # Clean and rebuild
+   pnpm clean
+   pnpm install
+   pnpm build
+   ```
+
+5. **MultiSynq endpoint not initialized:**
+   - Check backend logs for errors
+   - Ensure database is accessible
+   - Verify Context7 MCP server is installed in Docker image
+   - The initialization should happen automatically on startup
+
+6. **"Cannot find module" errors:**
+   ```bash
+   # Ensure all packages are built
+   pnpm build
+   
+   # If specific package fails, build it directly
+   cd packages/zod-types && pnpm build
+   cd packages/trpc && pnpm build
+   ```
 
 ### Viewing Logs
 
 ```bash
-# Docker logs
-docker-compose logs -f app
-
-# Backend logs (if running locally)
+# Backend logs (development)
 # Check the terminal where you ran `pnpm dev`
 
-# Database logs
-docker-compose logs -f postgres
+# Docker logs
+docker compose logs -f app
+
+# PostgreSQL logs
+sudo journalctl -u postgresql  # Linux
+tail -f /opt/homebrew/var/log/postgresql*.log  # macOS
+
+# Check specific initialization
+docker compose logs app | grep -i multisynq
 ```
+
+## Railway Deployment Compatibility
+
+The local setup is designed to work seamlessly with Railway deployment:
+
+1. **Database**: Railway provides PostgreSQL automatically
+2. **Environment Variables**: Railway injects DATABASE_URL and other vars
+3. **Docker**: The Dockerfile handles both local and Railway environments
+4. **Health Checks**: Same endpoints work locally and on Railway
 
 ## Development Tips
 
 1. **Hot Reload:** Both frontend and backend support hot reload in development mode
 
-2. **Database GUI:** Use Prisma Studio to view data:
-   ```bash
-   cd apps/backend
-   pnpm db:studio
-   ```
+2. **Environment Variables:** 
+   - Use `.env.local` for local development
+   - Use `.env` for Docker
+   - Never commit these files to git
 
-3. **API Testing:** Use the Swagger UI at http://localhost:12008/api for testing OpenAPI endpoints
+3. **API Testing:** Use the Swagger UI at http://localhost:12008/api
 
-4. **Rate Limiting:** In local development, rate limiting is set to 100 requests/minute. You can modify this in `apps/backend/src/middleware/rate-limit.middleware.ts`
+4. **Rate Limiting:** In local development, rate limiting is set to 100 requests/minute
+
+5. **Security Headers:** Relaxed in development for easier testing
+
+6. **Database GUI:** Prisma Studio provides a visual interface for your data
 
 ## Stopping Services
 
 ```bash
-# Stop all services
-docker-compose down
+# Stop local development servers
+# Press Ctrl+C in each terminal
+
+# Stop Docker services
+docker compose down
 
 # Stop and remove volumes (clean slate)
-docker-compose down -v
+docker compose down -v
+
+# Stop PostgreSQL
+sudo systemctl stop postgresql  # Linux
+brew services stop postgresql    # macOS
+
+# Stop PostgreSQL Docker container
+docker stop metamcp-postgres
+docker rm metamcp-postgres
 ```
 
 ---
 
-**Need Help?** Check the logs first, then refer to the troubleshooting section above. 
+**Need Help?** 
+1. Check the logs first
+2. Verify PostgreSQL is running and accessible
+3. Ensure all dependencies are installed with `pnpm install`
+4. Make sure all packages are built with `pnpm build`
+5. Check the troubleshooting section above 

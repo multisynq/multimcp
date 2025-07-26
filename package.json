@@ -4,13 +4,24 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "dotenv -e .env.local turbo run dev",
+    "dev:backend": "cd apps/backend && pnpm dev",
+    "dev:frontend": "cd apps/frontend && pnpm dev",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "test:playwright": "cd apps/backend && npx playwright test",
     "test:playwright:ui": "cd apps/backend && npx playwright test --ui",
-    "test:playwright:headed": "cd apps/backend && npx playwright test --headed"
+    "test:playwright:headed": "cd apps/backend && npx playwright test --headed",
+    "test:multisynq": "cd apps/backend && pnpm test:multisynq",
+    "db:push": "cd apps/backend && pnpm db:push",
+    "db:push:dev": "cd apps/backend && pnpm db:push:dev",
+    "db:studio": "cd apps/backend && pnpm db:studio",
+    "db:studio:dev": "cd apps/backend && pnpm db:studio:dev",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f app",
+    "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",

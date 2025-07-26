@@ -109,7 +109,56 @@ Similar to the official MCP inspector, but with **saved server configs** - MetaM
 
 ## 🚀 Quick Start
 
-### **🐳 Run with Docker Compose (Recommended)**
+### 🚀 Quick Local Development Setup
+
+For local development with MultiSynq integration:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/metatool-ai/metamcp.git
+cd metamcp
+
+# 2. Install dependencies
+pnpm install
+
+# 3. Set up local PostgreSQL database
+# Option A: Install PostgreSQL locally
+sudo apt install postgresql  # Ubuntu/Debian
+brew install postgresql      # macOS
+
+# Option B: Use Docker for PostgreSQL only
+docker run -d --name metamcp-postgres \
+  -e POSTGRES_USER=metamcp_user \
+  -e POSTGRES_PASSWORD=m3t4mcp \
+  -e POSTGRES_DB=metamcp_db \
+  -p 5432:5432 \
+  postgres:16-alpine
+
+# 4. Set up environment variables
+cat > .env.local << EOF
+DATABASE_URL=postgresql://metamcp_user:m3t4mcp@localhost:5432/metamcp_db
+BETTER_AUTH_SECRET=dev-secret-key-at-least-32-chars
+APP_URL=http://localhost:12008
+NEXT_PUBLIC_APP_URL=http://localhost:12008
+NODE_ENV=development
+EOF
+
+# 5. Build packages and initialize database
+pnpm build
+pnpm db:push:dev
+
+# 6. Start development servers
+pnpm dev:backend  # Terminal 1
+pnpm dev:frontend # Terminal 2
+
+# 7. Test MultiSynq integration
+curl http://localhost:12008/api/health
+# Open http://localhost:12008/mcp-inspector
+```
+
+For detailed instructions, see [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md)
+
+### **🐳 Run with Docker Compose (Recommended for Production)**
 
 Clone repo, prepare `.env`, and start with docker compose:
 
@@ -117,6 +166,7 @@ Clone repo, prepare `.env`, and start with docker compose:
 git clone https://github.com/metatool-ai/metamcp.git
 cd metamcp
 cp example.env .env
+# Edit .env with your configuration
 docker compose up -d
 ```
 
