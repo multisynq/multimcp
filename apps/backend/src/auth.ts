@@ -50,14 +50,14 @@ export const auth = betterAuth({
   trustedOrigins: [
     "http://localhost", // Added this line to fix the "Invalid origin" error
     "http://localhost:3000",
-    "http://localhost:12008",
+    `http://localhost:${process.env.FRONTEND_PORT}`,
     "http://127.0.0.1", // Also added this for good measure
-    "http://127.0.0.1:12008",
+    `http://127.0.0.1:${process.env.FRONTEND_PORT}`,
     "http://127.0.0.1:3000",
     "http://0.0.0.0",
     "http://0.0.0.0:3000",
     "http://localhost:6274/",
-    "http://0.0.0.0:12008",
+    `http://0.0.0.0:${process.env.FRONTEND_PORT}`,
     // Production origins for MultiSynq
     "https://mcp.multisynq.io",
     "https://multisynq.io",

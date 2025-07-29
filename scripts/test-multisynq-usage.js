@@ -143,7 +143,7 @@ async function main() {
   console.log("MultiSynq MCP Usage Test");
   console.log("=================================\n");
   
-  const baseUrl = process.env.BASE_URL || "http://localhost:12009";
+  const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.BACKEND_PORT || 12009}`;
   log.info(`Using base URL: ${baseUrl}`);
   
   try {

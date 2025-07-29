@@ -77,9 +77,9 @@ cleanup() {
 trap cleanup TERM INT
 
 # Start backend server
-echo -e "${YELLOW}Starting backend server on port 12009...${NC}"
+echo -e "${YELLOW}Starting backend server on port ${BACKEND_PORT}...${NC}"
 cd apps/backend
-DATABASE_URL="$DATABASE_URL" PORT=12009 node dist/index.js &
+DATABASE_URL="$DATABASE_URL" PORT=${BACKEND_PORT} node dist/index.js &
 BACKEND_PID=$!
 cd ../..
 
@@ -94,9 +94,9 @@ fi
 echo -e "${GREEN}✅ Backend server started successfully (PID: $BACKEND_PID)${NC}"
 
 # Start frontend server
-echo -e "${YELLOW}Starting frontend server on port 12008...${NC}"
+echo -e "${YELLOW}Starting frontend server on port ${FRONTEND_PORT}...${NC}"
 cd apps/frontend
-PORT=12008 pnpm dev &
+PORT=${FRONTEND_PORT} pnpm dev &
 FRONTEND_PID=$!
 cd ../..
 
@@ -113,9 +113,9 @@ echo -e "${GREEN}✅ Frontend server started successfully (PID: $FRONTEND_PID)${
 
 echo ""
 echo -e "${GREEN}Services started successfully!${NC}"
-echo -e "Frontend: ${YELLOW}http://localhost:12008${NC}"
-echo -e "Backend:  ${YELLOW}http://localhost:12009${NC}"
-echo -e "Inspector: ${YELLOW}http://localhost:12008/multisynq${NC}"
+echo -e "Frontend: ${YELLOW}http://localhost:${FRONTEND_PORT}${NC}"
+echo -e "Backend:  ${YELLOW}http://localhost:${BACKEND_PORT}${NC}"
+echo -e "Inspector: ${YELLOW}http://localhost:${FRONTEND_PORT}/multisynq${NC}"
 echo ""
 echo -e "Press ${YELLOW}Ctrl+C${NC} to stop all services"
 echo ""

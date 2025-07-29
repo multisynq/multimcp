@@ -134,7 +134,7 @@ app.use("/mcp-proxy", mcpProxyRouter);
 // Mount tRPC routes
 app.use("/trpc", trpcRouter);
 
-const port = parseInt(process.env.PORT || "12009", 10);
+const port = parseInt(process.env.BACKEND_PORT || "12009", 10);
 app.listen(port, "0.0.0.0", async () => {
   console.log(`Server is running on port ${port}`);
   console.log(`Auth routes available at: http://localhost:${port}/api/auth`);

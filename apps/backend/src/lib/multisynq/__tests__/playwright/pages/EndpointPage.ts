@@ -1,10 +1,10 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 export class EndpointPage {
   readonly page: Page;
   readonly baseURL: string;
 
-  constructor(page: Page, baseURL: string = 'http://localhost:12008') {
+  constructor(page: Page, baseURL: string = `http://localhost:${process.env.FRONTEND_PORT || 12008}`) {
     this.page = page;
     this.baseURL = baseURL;
   }
@@ -84,7 +84,7 @@ export class EndpointPage {
   }
 
   async testCORSHeaders() {
-    const response = await this.page.request.options('/sse', {
+      const response = await this.page.request.get('/sse', {
       headers: {
         'Origin': 'https://example.com',
         'Access-Control-Request-Method': 'GET'

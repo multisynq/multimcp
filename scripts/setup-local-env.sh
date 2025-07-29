@@ -169,12 +169,12 @@ POSTGRES_DB=metamcp_db
 
 # Application
 NODE_ENV=development
-APP_URL=http://localhost:12008
+APP_URL=http://localhost:${FRONTEND_PORT}
 BETTER_AUTH_SECRET=your-secret-key-here-change-in-production
 
 # Ports
-FRONTEND_PORT=12008
-BACKEND_PORT=12009
+FRONTEND_PORT=${FRONTEND_PORT:-12008}
+BACKEND_PORT=${BACKEND_PORT:-12009}
 EOF
     echo -e "${GREEN}✅ .env file created${NC}"
 else

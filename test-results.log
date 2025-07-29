@@ -1,0 +1,31 @@
+🧪 Starting MultiSynq MCP Test Suite
+======================================
+
+📋 Running Unit Tests...
+
+> test:multisynq
+> cd apps/backend && pnpm test:multisynq
+
+
+> backend@1.0.0 test:multisynq /home/will/git/0croquet/multimcp/apps/backend
+> vitest run src/lib/multisynq
+
+
+ RUN  v2.1.9 /home/will/git/0croquet/multimcp/apps/backend
+
+ ✓ src/lib/multisynq/__tests__/inspector.test.ts (6 tests) 7ms
+ ✓ src/lib/multisynq/__tests__/config.test.ts (10 tests) 6ms
+ ✓ src/lib/multisynq/__tests__/init.test.ts (4 tests) 7ms
+ ✓ src/lib/multisynq/__tests__/integration.test.ts (9 tests) 5ms
+
+ Test Files  4 passed (4)
+      Tests  29 passed (29)
+   Start at  14:46:36
+   Duration  655ms (transform 239ms, setup 117ms, collect 393ms, tests 25ms, environment 1ms, prepare 460ms)
+
+✅ Unit tests passed!
+
+🌐 Running Playwright Tests...
+undefined
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command "playwright" not found
+❌ Playwright tests failed!
