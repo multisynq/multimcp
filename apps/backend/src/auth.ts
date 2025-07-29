@@ -56,6 +56,7 @@ export const auth = betterAuth({
     "http://127.0.0.1:3000",
     "http://0.0.0.0",
     "http://0.0.0.0:3000",
+    "http://localhost:6274/",
     "http://0.0.0.0:12008",
     // Production origins for MultiSynq
     "https://mcp.multisynq.io",

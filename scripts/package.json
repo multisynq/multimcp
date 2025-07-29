@@ -4,10 +4,12 @@
   "type": "module",
   "description": "Scripts for MultiSynq MCP Server",
   "scripts": {
-    "test-usage": "node test-multisynq-usage.js"
+    "test-usage": "node test-multisynq-usage.js",
+    "fix-db": "node fix-db.js"
   },
   "dependencies": {
     "pg": "^8.16.0",
-    "@modelcontextprotocol/sdk": "^1.0.4"
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "dotenv": "^16.4.5"
   }
-} 
+}

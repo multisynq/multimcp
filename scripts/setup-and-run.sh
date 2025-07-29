@@ -3,6 +3,11 @@
 # Master Setup and Run Script for MultiSynq MCP Server
 # This script does everything from scratch on a fresh Ubuntu system
 
+if [ "$(id -u)" -ne 0 ]; then
+    echo -e "${YELLOW}Please run this script with sudo: sudo ./scripts/setup-and-run.sh${NC}"
+    exit 1
+fi
+
 set -e
 
 # Colors for output
@@ -39,90 +44,28 @@ echo ""
 echo -e "${GREEN}✅ Environment setup complete!${NC}"
 echo ""
 
-# Step 2: Run tests
-echo -e "${YELLOW}Step 2: Running tests...${NC}"
+
+
+# Step 3: Fix database configuration
+echo -e "${YELLOW}Step 3: Fixing database configuration...${NC}"
 echo "----------------------------------------"
-
-# Run unit tests
-echo -e "${BLUE}Running unit tests...${NC}"
-if npm run test:multisynq; then
-    echo -e "${GREEN}✅ Unit tests passed!${NC}"
-else
-    echo -e "${RED}❌ Unit tests failed!${NC}"
-    echo -e "${YELLOW}Continuing anyway...${NC}"
-fi
-
-# Run validation
-echo -e "${BLUE}Running MultiSynq validation...${NC}"
-if cd apps/backend && node validate-multisynq.mjs && cd ../..; then
-    echo -e "${GREEN}✅ Validation passed!${NC}"
-else
-    echo -e "${RED}❌ Validation failed!${NC}"
-    echo -e "${YELLOW}Continuing anyway...${NC}"
-    cd "$PROJECT_ROOT"
-fi
-
-echo ""
-echo -e "${GREEN}✅ Tests complete!${NC}"
-echo ""
-
-# Step 3: Start servers
-echo -e "${YELLOW}Step 3: Starting servers...${NC}"
-echo "----------------------------------------"
-
-# Function to check if command exists
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-# Function to open URL in browser
-open_url() {
-    local url=$1
-    if command_exists xdg-open; then
-        xdg-open "$url" 2>/dev/null &
-    elif command_exists open; then
-        open "$url" 2>/dev/null &
-    elif command_exists start; then
-        start "$url" 2>/dev/null &
-    else
-        echo -e "${YELLOW}Please open $url in your browser${NC}"
-    fi
-}
-
-# Start the servers in background
-echo -e "${BLUE}Starting backend and frontend servers...${NC}"
-./scripts/run-local.sh &
-SERVER_PID=$!
-
-# Wait for servers to be ready
-echo -e "${YELLOW}Waiting for servers to start...${NC}"
-sleep 10
-
-# Check if servers are running
-if kill -0 $SERVER_PID 2>/dev/null; then
-    echo -e "${GREEN}✅ Servers are running!${NC}"
-else
-    echo -e "${RED}❌ Servers failed to start!${NC}"
-    exit 1
-fi
-
-echo ""
-echo -e "${YELLOW}Step 4: Testing MultiSynq Usage...${NC}"
-echo "----------------------------------------"
-
-# Install dependencies for test script
-echo -e "${BLUE}Installing test dependencies...${NC}"
 cd scripts
-npm install --silent
+pnpm install
+pnpm fix-db
 cd ..
+echo ""
+echo -e "${GREEN}✅ Database configuration fixed!${NC}"
+echo ""
 
-# Run usage tests
-echo -e "${BLUE}Running MultiSynq usage tests...${NC}"
-if node scripts/test-multisynq-usage.js; then
-    echo -e "${GREEN}✅ Usage tests passed!${NC}"
+# Step 4: Run tests
+echo -e "${YELLOW}Step 4: Running tests...${NC}"
+echo "----------------------------------------"
+if ./scripts/test-all.sh; then
+    echo -e "${GREEN}✅ All tests passed!${NC}"
 else
-    echo -e "${RED}❌ Usage tests failed!${NC}"
-    echo -e "${YELLOW}Check if the MultiSynq endpoint is properly configured${NC}"
+    echo -e "${RED}❌ Tests failed!${NC}"
+    echo -e "${YELLOW}Check test-results.log for details.${NC}"
+    exit 1
 fi
 
 echo ""

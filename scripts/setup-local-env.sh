@@ -29,10 +29,7 @@ is_postgres_running() {
 }
 
 # Check if running as root
-if [ "$EUID" -eq 0 ]; then 
-   echo -e "${RED}Please don't run this script as root${NC}"
-   exit 1
-fi
+
 
 # Check if we already have a .env file
 if [ -f .env ]; then
@@ -42,7 +39,7 @@ fi
 
 # Update package list
 echo -e "${YELLOW}Updating package list...${NC}"
-sudo apt-get update
+apt-get update -y
 
 # Install essential tools
 echo -e "${YELLOW}Installing essential tools...${NC}"
