@@ -66,7 +66,7 @@ echo "✅ Backend server started successfully (PID: $BACKEND_PID)"
 # Start frontend
 echo "Starting frontend server..."
 cd /app/apps/frontend
-FRONTEND_PORT=${FRONTEND_PORT:-12008} node dist/index.js &
+FRONTEND_PORT=${FRONTEND_PORT:-12008} pnpm start &
 FRONTEND_PID=$!
 
 # Wait a moment for frontend to start
